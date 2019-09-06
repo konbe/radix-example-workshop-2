@@ -1,44 +1,38 @@
 import React from 'react';
-import Echo from './Components/Echo'
-import Header from './Components/Header'  
+import Echo from './components/Echo'
+import Header from './components/Header'
+import EchoService from './services/Echo'  
 import './App.css';
 
 class App extends React.Component {
   constructor() {
     super()
+
+    this.refreshInterval = 1000;
+    this.mockData = false;
+    
     this.state ={
       echoResult: {},
-      refreshInterval: 5
+      nrRefresh: 0
     }
   }
 
-  getData(){
-    const data = {
-      "RADIX_APP": "my_app",
-      "RADIX_CLUSTERNAME": "dev-1",
-      "RADIX_COMPONENT": "echo",
-      "RADIX_ENVIRONMENT": "development",
-      "RADIX_HOSTNAME":"https://external-preview.redd.it/7a_iqSnsaDNABkxgJDq_hhmMlXp0B6TXwg7mgaGFBRk.jpg?auto=webp&s=aa42f6e3468e517efa41e8b857ac84d56fdfa909",
-      "RADIX_HOSTPLATFORM":"linux"
-    };
-    this.setState({ echoResult: data})
-
-    // fetch('/api/echo.json')
-    //   .then(result=> {return result.json()})
-    //   .then(data => {
-    //     this.setState({echoResult: data})
-    //   })
+  componentDidMount() {
+    setInterval(this.loadData, this.refreshInterval) 
   }
 
-  componentDidMount() {
-    this.getData()
+  loadData = () => {
+    const echoService = EchoService(this.mockData)
+    const nrRefresh = this.state.nrRefresh + 1
+
+    echoService.fetch('/api/echo').then(data => this.setState({ echoResult: data, nrRefresh: nrRefresh}))
   }
   
   render() {
     return (
       <div className="App">
         <Header />
-        <Echo result={this.state.echoResult} refreshInterval={this.state.refreshInterval} />
+        <Echo result={this.state.echoResult} refreshInterval={this.refreshInterval} nrRefresh={this.state.nrRefresh} />
       </div>
     );
   }
