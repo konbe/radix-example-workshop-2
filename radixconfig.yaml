@@ -1,12 +1,12 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: echo
+  name: lightning
 spec:
   environments:
     - name: development
       build:
-        from: master
+        from: lightning
   components:
     - name: www
       src: ./www
