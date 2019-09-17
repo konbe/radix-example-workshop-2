@@ -1,7 +1,7 @@
 apiVersion: radix.equinor.com/v1
 kind: RadixApplication
 metadata:
-  name: konbe_lightning
+  name: konbe-lightning
 spec:
   environments:
     - name: development
